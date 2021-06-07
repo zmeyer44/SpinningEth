@@ -1,4 +1,5 @@
 import "./style.css";
+import obj from "./Ethereum.obj?url";
 
 import * as THREE from "three";
 
@@ -9,7 +10,6 @@ import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 let camera, controls, scene, renderer, effect;
 
 let sphere, plane, eth;
-
 const start = Date.now();
 
 init();
@@ -48,7 +48,7 @@ function init() {
   // load a resource
   loader.load(
     // resource URL
-    "Ethereum.obj",
+    obj,
     // called when resource is loaded
     function (object) {
       eth = object;

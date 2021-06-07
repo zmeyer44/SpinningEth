@@ -9,10 +9,14 @@ import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 
 let camera, controls, scene, renderer, effect;
 
-let sphere, plane, eth;
+let eth;
+let mouseX = 0;
+let targetX = 0;
+let raycaster, mouse, intersects;
 const start = Date.now();
 
 init();
+
 animate();
 
 function init() {
@@ -36,12 +40,17 @@ function init() {
   pointLight2.position.set(-500, -500, -500);
   scene.add(pointLight2);
 
-  sphere = new THREE.Mesh(
-    new THREE.SphereGeometry(200, 20, 10),
-    new THREE.MeshPhongMaterial({ flatShading: true })
-  );
-  //   scene.add(sphere);
+  ////test cube
+  // let geometry = new THREE.BoxGeometry(100, 100, 100);
 
+  // let material = new THREE.MeshLambertMaterial({ color: 0xffffff });
+
+  // let cube = new THREE.Mesh(geometry, material);
+
+  // scene.add(cube);
+
+  // cube.position.x = 4;
+  // cube.position.z = 400;
   // instantiate a loader
   const loader = new OBJLoader();
 
@@ -64,16 +73,6 @@ function init() {
     }
   );
 
-  // Plane
-
-  plane = new THREE.Mesh(
-    new THREE.PlaneGeometry(400, 400),
-    new THREE.MeshBasicMaterial({ color: 0xe0e0e0 })
-  );
-  plane.position.y = -200;
-  plane.rotation.x = -Math.PI / 2;
-  //   scene.add(plane);
-
   renderer = new THREE.WebGLRenderer();
 
   //   renderer = new THREE.WebGLRenderer({
@@ -93,7 +92,11 @@ function init() {
 
   controls = new TrackballControls(camera, effect.domElement);
 
-  //
+  raycaster = new THREE.Raycaster();
+
+  mouse = new THREE.Vector2();
+
+  document.addEventListener("mousemove", onMouseMove);
 
   window.addEventListener("resize", onWindowResize);
 }
@@ -115,14 +118,43 @@ function animate() {
 }
 
 function render() {
+  // raycaster.setFromCamera(mouse, camera);
+
+  // intersects = raycaster.intersectObjects(scene.children);
+  // console.log(intersects);
+  // console.log(mouse);
+
+  // for (var i = 0; i < intersects.length; i++) {
+  //   console.log(mouse);
+
+  //   intersects[i].object.rotation.z += 0.002;
+  // }
+
   const timer = Date.now() - start;
 
   eth.position.y = Math.abs(Math.sin(timer * 0.002)) * 130 - 100;
-  eth.rotation.y = Math.sin(timer * 0.001) * 0.5;
-  //   eth.rotation.x = Math.sin(timer * 0.001) * 0.5;
+  eth.rotation.y = Math.sin(timer * 0.001) * 0.3;
+  eth.rotation.x = Math.sin(timer * 0.001) * 0.00005;
   eth.rotation.z = Math.sin(timer * 0.003) * 0.07;
+
+  eth.rotation.y += mouse.x * 0.5;
+  eth.rotation.x -= mouse.y * 0.5;
 
   controls.update();
 
   effect.render(scene, camera);
+}
+
+let mouseY = 0;
+
+let targetY = 0;
+
+// const windowX = window.innerWidth / 2;
+const windowY = window.innerHeight / 2;
+
+function onMouseMove(event) {
+  console.log("moved");
+
+  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 }

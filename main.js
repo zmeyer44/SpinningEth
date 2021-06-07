@@ -91,6 +91,7 @@ function init() {
   document.body.appendChild(effect.domElement);
 
   controls = new TrackballControls(camera, effect.domElement);
+  controls.enabled = false;
 
   raycaster = new THREE.Raycaster();
 
@@ -140,7 +141,7 @@ function render() {
   eth.rotation.y += mouse.x * 0.5;
   eth.rotation.x -= mouse.y * 0.5;
 
-  controls.update();
+  // controls.update();
 
   effect.render(scene, camera);
 }
